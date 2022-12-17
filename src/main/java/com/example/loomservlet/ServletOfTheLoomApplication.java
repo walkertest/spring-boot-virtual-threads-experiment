@@ -10,8 +10,9 @@ import org.springframework.boot.web.embedded.tomcat.TomcatProtocolHandlerCustomi
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.core.task.support.TaskExecutorAdapter;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
+//import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.web.bind
+		.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
@@ -39,11 +40,11 @@ public class ServletOfTheLoomApplication {
 	@RestController
 	static class MyController {
 
-		final JdbcTemplate jdbcTemplate;
-
-		MyController(JdbcTemplate jdbcTemplate) {
-			this.jdbcTemplate = jdbcTemplate;
-		}
+//		final JdbcTemplate jdbcTemplate;
+//
+//		MyController(JdbcTemplate jdbcTemplate) {
+//			this.jdbcTemplate = jdbcTemplate;
+//		}
 
 		@GetMapping("/")
 		String getValue() throws InterruptedException {
@@ -53,6 +54,10 @@ public class ServletOfTheLoomApplication {
 			return "OK";
 		}
 
+		/**
+		 * curl "127.0.0.1:8080/where-am-i"
+		 * @return
+		 */
 		@GetMapping("/where-am-i")
 		String getThreadName() {
 			return Thread.currentThread().toString();
@@ -67,7 +72,8 @@ public class ServletOfTheLoomApplication {
 		String getFromDatabase() {
 
 			// Simulate blocking I/O where the server side controls the timeout. The thread should be put aside for about a second.
-			return jdbcTemplate.queryForList("select pg_sleep(1);").toString();
+			return null;
+//			return jdbcTemplate.queryForList("select pg_sleep(1);").toString();
 		}
 	}
 

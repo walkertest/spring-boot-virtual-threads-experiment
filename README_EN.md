@@ -1,4 +1,4 @@
-springmvc虚拟线程测试项目.
+Project Loom Experiment using Spring Boot, Spring WebMVC, and Postgres
 ======================================================================
 
 This repository contains an experiment that uses a Spring Boot application with [Virtual Threads](https://wiki.openjdk.java.net/display/loom/Main).
