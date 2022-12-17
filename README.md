@@ -3,7 +3,7 @@ springmvc虚拟线程测试项目.
 
 This repository contains an experiment that uses a Spring Boot application with [Virtual Threads](https://wiki.openjdk.java.net/display/loom/Main).
 
-Involved components:
+包版本依赖：
 
 * Spring Framework 6.0 M5
 * Spring Boot 3.0 M4
@@ -15,8 +15,8 @@ This experiment evolves incrementally, find the previous state at https://github
 
 You need Java 19 (EAP) with `--enable-preview` to run the example. 
 
-Customization of a vanilla Spring Boot with Tomcat application:
-                                                              
+
+tomcat 开启虚拟线程模式，线程池替换为虚拟线程即可. 
 ```java
 @Bean
 AsyncTaskExecutor applicationTaskExecutor() {
@@ -34,21 +34,48 @@ TomcatProtocolHandlerCustomizer<?> protocolHandlerVirtualThreadExecutorCustomize
 }
 ```
 
-After starting the application, run `GET http://localhpst:8080/where-am-i` to verify you're running on a virtual thread:
-
-```
-$ http :8080/where-am-i                                      
-HTTP/1.1 200 
-Connection: keep-alive
-Content-Length: 51
-Content-Type: text/plain;charset=UTF-8
-Date: Wed, 27 Jul 2022 09:34:23 GMT
-Keep-Alive: timeout=60
-
-VirtualThread[#82]/runnable@ForkJoinPool-1-worker-1
+启动线程之后，判断自己是否处于虚拟线程模式：
+```aidl
+$ curl "127.0.0.1:8080/where-am-i"
+VirtualThread[#73]/runnable@ForkJoinPool-1-worker-17
 ```
 
-License
--------
+# 性能测试
+## sleep模拟耗时情况下的qps
+### 虚拟线程模式下的数据
+```aidl
+./ab  -n 1000 -c 10 "127.0.0.1:8080/sleepTest"
+Concurrency Level:      10
+Time taken for tests:   102.438 seconds
+Complete requests:      1000
+Failed requests:        0
+Total transferred:      134000 bytes
+HTML transferred:       2000 bytes
+Requests per second:    9.76 [#/sec] (mean)
+Time per request:       1024.385 [ms] (mean)
+Time per request:       102.438 [ms] (mean, across all concurrent requests)
+Transfer rate:          1.28 [Kbytes/sec] received
 
-* [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.6      0      10
+Processing:  1001 1014   5.1   1013    1054
+Waiting:     1001 1013   5.0   1013    1054
+Total:       1001 1014   5.1   1014    1054
+
+Percentage of the requests served within a certain time (ms)
+  50%   1014
+  66%   1015
+  75%   1016
+  80%   1017
+  90%   1019
+  95%   1022
+  98%   1027
+  99%   1030
+ 100%   1054 (longest request)
+```
+
+### 网络请求下的耗时
+
+
+### 数据库/缓存下的耗时.

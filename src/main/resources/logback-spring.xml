@@ -1,0 +1,59 @@
+<!--这里配置只支持 spring boot -->
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/default.xml"/>
+
+    <!-- 项目名称 -->
+    <springProperty scope="context" name="springProjectName" source="spring.project.name" defaultValue="huyapassport" />
+    <!-- 模块名称 -->
+    <springProperty scope="context" name="springAppName" source="spring.application.name"  defaultValue="virtualThread"/>
+
+    <property name="LOG_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %marker ${springAppName:-} [%thread] [%X{traceId:-}] %logger{1} --- %msg%n"/>
+
+    <property name="LOG_DIR" value="/data/log/huyapassport/"/>
+
+
+    <!--控制台输出 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="DETAILS" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/udb_server_details/${springAppName}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/udb_server_details/${springAppName}.%d{yyyy-MM-dd,Asia/Hong_Kong}.%i.log</fileNamePattern>
+            <maxFileSize>800MB</maxFileSize>
+            <maxHistory>60</maxHistory>
+            <totalSizeCap>20GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+
+    <appender name="detailsAppender" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="DETAILS" />
+    </appender>
+
+    <root level="INFO">
+        <springProfile name="dev">
+            <!--开发开启控制台输出 -->
+            <appender-ref ref="STDOUT" />
+            <appender-ref ref="detailsAppender" />
+        </springProfile>
+
+        <springProfile name="test,pre,prod">
+            <appender-ref ref="STDOUT" />
+            <appender-ref ref="detailsAppender" />
+        </springProfile>
+
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="detailsAppender" />
+
+    </root>
+
+
+</configuration>
