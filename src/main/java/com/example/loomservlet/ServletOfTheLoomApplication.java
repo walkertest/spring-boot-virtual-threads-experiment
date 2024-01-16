@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ServletOfTheLoomApplication {
 
 	public static void main(String[] args) {
+		System.setProperty("jdk.tracePinnedThreads","full");
 		SpringApplication.run(ServletOfTheLoomApplication.class, args);
 	}
 

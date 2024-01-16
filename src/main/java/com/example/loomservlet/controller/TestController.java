@@ -1,7 +1,9 @@
 package com.example.loomservlet.controller;
 
+import com.example.loomservlet.service.FuncTestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +14,19 @@ import java.util.concurrent.Callable;
 public class TestController {
 
     Logger log = LoggerFactory.getLogger(this.getClass());
+
+    @Autowired
+    FuncTestService funcTestService;
+
+    /**
+     * curl "127.0.0.1:8082/testFunc?func=syncSleep1"
+     * @return
+     */
+    @GetMapping("/testFunc")
+    String testFunc(@RequestParam(required = false) String func) {
+        funcTestService.funcDispatch(func);
+        return "suc";
+    }
 
     /**
      * curl "127.0.0.1:8080/where-am-i"
