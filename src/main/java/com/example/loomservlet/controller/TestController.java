@@ -29,7 +29,7 @@ public class TestController {
     }
 
     /**
-     * curl "127.0.0.1:8080/where-am-i"
+     * curl "127.0.0.1:8082/where-am-i"
      * @return
      */
     @GetMapping("/where-am-i")
@@ -39,7 +39,7 @@ public class TestController {
 
 
     /**
-     * curl "127.0.0.1:8080/sleepTest?sleepTime=1000"
+     * curl "127.0.0.1:8082/sleepTest?sleepTime=1000"
      * sleep测试
      * @return
      * @throws InterruptedException
