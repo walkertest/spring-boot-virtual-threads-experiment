@@ -10,7 +10,7 @@ public class VtPinnedDebugDemo {
     static Logger logger = LoggerFactory.getLogger(VtPinnedDebugDemo.class);
 
     public static void main(String[] args) throws InterruptedException {
-        System.setProperty("jdk.tracePinnedThreads", "full");
+//        System.setProperty("jdk.tracePinnedThreads", "full");
 
         testPinned(1);
 
